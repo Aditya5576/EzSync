@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EzSync — Free real-time collaborative code editor. Share code instantly, no signup needed. Supports 50+ languages with live sync.">
+  <meta property="og:title" content="EzSync — Real-Time Collaborative Code Editor">
+  <meta property="og:description" content="Share code in real-time with anyone. No signup required.">
+  <title>EzSync — Real-Time Collaborative Code Editor</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="landing.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+<!-- ── Navigation ─────────────────────────────────────────────── -->
+<nav class="nav" id="main-nav">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">⚡</div>
+    <div>
+      <span class="nav-logo-text">EzSync</span>
+      <span class="nav-logo-tagline">Real-time collaboration</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#features" class="nav-link hide-mobile">Features</a>
+    <a href="#recent" class="nav-link hide-mobile">Recent</a>
+    <button id="btn-new-session" class="nav-new-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M12 5v14M5 12h14"/>
+      </svg>
+      New Session
+    </button>
+  </div>
+</nav>
+
+<!-- ── Hero ───────────────────────────────────────────────────── -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot dot-live"></span>
+      Real-time collaboration · No signup required
+    </div>
+
+    <h1 class="hero-title">
+      Code Together,<br>
+      <span class="grad-text">In Real Time</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      The fastest way to share, collaborate, and review code with anyone, anywhere.
+      Just create a session, share the link, and start coding together instantly.
+    </p>
+
+    <!-- Room name input (like Codeshare) -->
+    <div class="room-input-wrap">
+      <div class="room-input-bar" id="room-input-bar">
+        <span class="room-input-prefix">editor.html#</span>
+        <input
+          type="text"
+          id="room-name-input"
+          class="room-name-input"
+          placeholder="my-room  (or leave blank for random)"
+          maxlength="40"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button id="btn-go" class="btn-go">
+          Go
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+      <p class="room-input-hint">Type a name like <code>aditya</code> or <code>team-alpha</code>, or leave blank for a random ID</p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <span class="stat-number" data-count="50" data-suffix="+">50+</span>
+        <span class="stat-label">Languages</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" data-count="4" data-suffix="">4</span>
+        <span class="stat-label">Editor Themes</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" data-count="0" data-suffix="ms">~0ms</span>
+        <span class="stat-label">Sync Latency</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" data-count="100" data-suffix="%">100%</span>
+        <span class="stat-label">Free Forever</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Features ───────────────────────────────────────────────── -->
+<section class="section" id="features">
+  <div class="section-header">
+    <div class="section-label">Why EzSync?</div>
+    <h2 class="section-title">Everything you need to<br>collaborate on code</h2>
+    <p class="section-subtitle">Built for developers, by developers. No bloat, just pure collaboration.</p>
+  </div>
+
+  <div class="features-grid">
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(79,142,247,0.12); border: 1px solid rgba(79,142,247,0.2);">⚡</div>
+      <h3 class="feature-title">Instant Real-Time Sync</h3>
+      <p class="feature-desc">Every keystroke syncs within 300ms across all browsers, incognito windows, and devices. No setup, no accounts.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.2);">🌐</div>
+      <h3 class="feature-title">50+ Languages</h3>
+      <p class="feature-desc">JavaScript, TypeScript, Python, Java, C++, Rust, Go, Swift, Kotlin, HTML, CSS, SQL, and many more with full syntax highlighting.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.2);">👥</div>
+      <h3 class="feature-title">Live Collaborators</h3>
+      <p class="feature-desc">See who's in the session with live avatar bubbles and real-time remote cursor positions, each in a unique color.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.2);">🎨</div>
+      <h3 class="feature-title">4 Editor Themes</h3>
+      <p class="feature-desc">Choose from Dracula, Monokai, GitHub Light, and Nord themes. Your preference is saved automatically.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(236,72,153,0.12); border: 1px solid rgba(236,72,153,0.2);">🔗</div>
+      <h3 class="feature-title">One-Click Sharing</h3>
+      <p class="feature-desc">Each session gets a unique URL. Share it with anyone — they join instantly, no account required.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(34,211,238,0.12); border: 1px solid rgba(34,211,238,0.2);">✨</div>
+      <h3 class="feature-title">Code Beautify & Download</h3>
+      <p class="feature-desc">Format your code with one click. Download it in the correct file extension for your language.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Recent Sessions ─────────────────────────────────────────── -->
+<section class="recent-sessions-section" id="recent">
+  <div class="section-header">
+    <div class="section-label">Your Sessions</div>
+    <h2 class="section-title" style="font-size: 32px;">Recent Sessions</h2>
+    <p class="section-subtitle" style="font-size: 15px;">Pick up where you left off.</p>
+  </div>
+
+  <div class="sessions-list" id="sessions-list">
+    <!-- Rendered by app.js -->
+  </div>
+
+  <div style="text-align:center; margin-top: 20px;">
+    <button id="btn-clear-sessions" class="btn btn-ghost btn-sm" style="margin-top:8px;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+      </svg>
+      Clear History
+    </button>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────────────── -->
+<footer class="footer">
+  <p>
+    <strong style="color: var(--text-primary);">EzSync</strong> — Real-time collaborative code editor.
+    Built with ❤️ &nbsp;|&nbsp;
+    <a href="editor.html">Open Editor</a>
+  </p>
+</footer>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

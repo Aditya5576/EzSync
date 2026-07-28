@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EzSync Editor — Real-time collaborative code editor with syntax highlighting, live sync, and 50+ languages.">
+  <title>EzSync Editor</title>
+
+  <!-- ── CodeMirror Core ── -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+
+  <!-- ── CodeMirror Themes ── -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/monokai.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/nord.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material.min.css">
+
+  <!-- ── CodeMirror Addons ── -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/dialog/dialog.min.css">
+
+  <!-- ── Our Styles ── -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="editor.css">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
+  <style>
+    /* Inline critical editor background */
+    .editor-wrapper .CodeMirror {
+      background: #282a36 !important; /* dracula default */
+      flex: 1;
+      width: 100%;
+    }
+    [data-theme="light"] .editor-wrapper .CodeMirror {
+      background: #fff !important;
+    }
+    /* Prevent FOUC */
+    body { visibility: visible; }
+  </style>
+</head>
+<body>
+
+<div class="editor-page" id="editor-page">
+
+  <!-- ══════════════════════════════════════════════════════════
+       TOOLBAR
+  ══════════════════════════════════════════════════════════ -->
+  <header class="toolbar" id="toolbar">
+
+    <!-- Logo -->
+    <a href="/" class="toolbar-logo" title="Back to Home">
+      <div class="toolbar-logo-icon">⚡</div>
+      <span class="toolbar-logo-text hide-mobile">EzSync Editor</span>
+    </a>
+
+    <div class="toolbar-divider"></div>
+
+    <!-- Session ID + Copy Link -->
+    <div class="session-info" id="session-info-bar" title="Click to copy share link">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+      </svg>
+      <span class="session-id" id="room-id-display">loading…</span>
+      <span class="session-copy-icon">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+      </span>
+    </div>
+
+    <div class="toolbar-divider"></div>
+
+    <!-- Language Selector -->
+    <div class="lang-select-wrap">
+      <select id="lang-select" class="lang-select" title="Select Language">
+        <!-- Populated by editor.js -->
+      </select>
+      <span class="lang-select-arrow">▾</span>
+    </div>
+
+    <!-- Theme Selector -->
+    <div style="position:relative">
+      <select id="theme-select" class="theme-select" title="Select Theme">
+        <!-- Populated by editor.js -->
+      </select>
+      <span class="lang-select-arrow" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted);font-size:10px;">▾</span>
+    </div>
+
+    <!-- Spacer -->
+    <div class="toolbar-spacer"></div>
+
+    <!-- Active Users -->
+    <div class="users-row" id="users-row">
+      <!-- Rendered by editor.js -->
+    </div>
+
+    <div class="toolbar-divider hide-mobile"></div>
+
+    <!-- Action Buttons -->
+    <div class="toolbar-actions">
+
+      <!-- Upload File -->
+      <label class="toolbar-btn" id="btn-upload-label" title="Upload Code/Image File">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <span class="hide-mobile">Upload</span>
+        <input type="file" id="file-upload-input" style="display:none;" accept="*/*">
+      </label>
+
+      <!-- View Image (shown when image code/data URI is detected) -->
+      <button class="toolbar-btn" id="btn-view-image" title="View Uploaded Image" style="display:none; color: var(--accent-blue);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <span class="hide-mobile">View Image</span>
+      </button>
+
+      <!-- Beautify -->
+      <button class="toolbar-btn" id="btn-beautify" title="Beautify Code (Ctrl+Shift+F)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+        <span class="hide-mobile">Format</span>
+      </button>
+
+      <!-- Copy Code -->
+      <button class="toolbar-btn" id="btn-copy-code" title="Copy Code (Ctrl+C all)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+        <span class="hide-mobile">Copy</span>
+      </button>
+
+      <!-- Download -->
+      <button class="toolbar-btn" id="btn-download" title="Download File">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span class="hide-mobile">Download</span>
+      </button>
+
+      <!-- Share -->
+      <button class="toolbar-btn" id="btn-share" title="Share Session">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        <span class="hide-mobile">Share</span>
+      </button>
+
+      <!-- Read Only -->
+      <button class="toolbar-btn" id="btn-readonly" title="Toggle Read-only">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </button>
+
+      <!-- Settings -->
+      <button class="toolbar-btn" id="btn-settings" title="Settings">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+
+      <!-- Shortcuts -->
+      <button class="toolbar-btn hide-mobile" id="btn-shortcuts" title="Keyboard Shortcuts">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/>
+        </svg>
+      </button>
+
+      <!-- New Session -->
+      <button class="toolbar-btn" id="btn-new-session" title="Open New Session" style="color:var(--accent-blue);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+        <span class="hide-mobile">New</span>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SYNC STATUS BAR
+  ══════════════════════════════════════════════════════════ -->
+  <div class="sync-bar live" id="sync-bar">
+    <div class="sync-icon"></div>
+    <span id="sync-text">Connecting…</span>
+    <span style="margin-left:8px; color: var(--text-muted); font-size:11px;">
+      👥 <span id="user-count">1</span> active
+    </span>
+    <span id="sync-timestamp"></span>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       EDITOR
+  ══════════════════════════════════════════════════════════ -->
+  <div class="editor-wrapper" id="editor-wrapper">
+    <textarea id="editor-textarea" placeholder="Start typing your code…"></textarea>
+
+    <!-- Drag & Drop overlay -->
+    <div class="drop-overlay" id="drop-overlay">
+      <div class="drop-overlay-inner">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <p>Drop your file here</p>
+        <span>Content will load into the editor and sync to all peers</span>
+      </div>
+    </div>
+
+    <!-- Typing indicator -->
+    <div class="typing-indicator" id="typing-indicator">
+      <div class="typing-dots">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+      <span class="typing-label">Someone is typing…</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       STATUS BAR
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="status-bar" id="status-bar">
+    <div class="status-item" title="Room ID">
+      <span class="accent">⚡</span>
+      <span id="status-room-id" style="font-family:var(--font-code); font-size:11px;"></span>
+    </div>
+    <div class="status-item">
+      <span id="status-lang">JavaScript</span>
+    </div>
+    <div class="status-item">
+      <span id="status-line">Ln 1</span>
+    </div>
+    <div class="status-item">
+      <span id="status-col">Col 1</span>
+    </div>
+    <div class="status-item">
+      <span id="status-lines">1 lines</span>
+    </div>
+    <div class="status-item">
+      <span id="status-chars">0 chars</span>
+    </div>
+    <div class="status-item">
+      <span id="status-tab">Tab: 2</span>
+    </div>
+    <div class="status-item">
+      <span class="ok" id="status-enc">UTF-8</span>
+    </div>
+  </footer>
+
+</div><!-- end .editor-page -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODAL: SHARE
+══════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-share">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">🔗 Share Session</h2>
+      <button class="modal-close" data-close-modal="modal-share">✕</button>
+    </div>
+
+    <p class="text-sm text-secondary" style="margin-bottom: 16px;">
+      Anyone with this link can view and edit the code in real time. No account needed.
+    </p>
+
+    <div class="share-url-row">
+      <input type="text" class="share-url-input" id="share-url-input" readonly>
+      <button class="btn btn-primary btn-sm" id="btn-share-copy">Copy</button>
+    </div>
+
+    <div class="qr-placeholder">📱</div>
+    <p class="text-xs text-muted" style="text-align:center;">Scan QR or share the link above</p>
+
+    <div style="margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap;">
+      <span class="badge badge-green"><span class="dot dot-live"></span> Live Session</span>
+      <span class="badge badge-blue">🔓 Public</span>
+      <span class="badge badge-purple">♾ No Expiry</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODAL: SETTINGS
+══════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay settings-modal" id="modal-settings">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">⚙️ Editor Settings</h2>
+      <button class="modal-close" data-close-modal="modal-settings">✕</button>
+    </div>
+
+    <!-- Typography -->
+    <div class="settings-section">
+      <div class="settings-section-title">Typography</div>
+
+      <div class="form-group">
+        <label class="form-label">Font Size — <span id="font-size-value">14px</span></label>
+        <div class="range-row">
+          <input type="range" id="setting-font-size" min="10" max="24" value="14" step="1">
+          <span class="range-value" id="font-size-value-inline">14px</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Tab Size — <span id="tab-size-value">2</span></label>
+        <div class="range-row">
+          <input type="range" id="setting-tab-size" min="2" max="8" value="2" step="2">
+          <span class="range-value" id="tab-size-value-inline">2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Behavior -->
+    <div class="settings-section">
+      <div class="settings-section-title">Behavior</div>
+
+      <div class="toggle-wrap">
+        <span class="toggle-label">Word Wrap</span>
+        <label class="toggle">
+          <input type="checkbox" id="setting-word-wrap">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-wrap">
+        <span class="toggle-label">Read-Only Mode</span>
+        <label class="toggle">
+          <input type="checkbox" id="setting-read-only">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="btn-settings-apply" style="width:100%;justify-content:center;">
+      Apply Settings
+    </button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODAL: KEYBOARD SHORTCUTS
+══════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-shortcuts">
+  <div class="modal" style="max-width: 560px;">
+    <div class="modal-header">
+      <h2 class="modal-title">⌨️ Keyboard Shortcuts</h2>
+      <button class="modal-close" data-close-modal="modal-shortcuts">✕</button>
+    </div>
+
+    <div class="shortcuts-grid">
+      <div class="shortcut-item">
+        <span class="shortcut-label">Save</span>
+        <div class="shortcut-keys"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">S</kbd></div>
+      </div>
+      <div class="shortcut-item">
+        <span class="shortcut-label">Beautify</span>
+        <div class="shortcut-keys"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">⇧F</kbd></div>
+      </div>
+      <div class="shortcut-item">
+        <span class="shortcut-label">Find</span>
+        <div class="shortcut-keys"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">F</kbd></div>
+      </div>
+      <div class="shortcut-item">
+        <span class="shortcut-label">Toggle Comment</span>
+        <div class="shortcut-keys"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">/</kbd></div>
+      </div>
+      <div class="shortcut-item">
+        <span class="shortcut-label">Delete Line</span>
+        <div class="shortcut-keys"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">D</kbd></div>
+      </div>
+      <div class="shortcut-item">
+        <span class="shortcut-label">Indent More</span>
+        <div class="shortcut-keys"><kbd class="kbd">Tab</kbd></div>
+      </div>
+      <div class="shortcut-item">
+        <span class="shortcut-label">Indent Less</span>
+        <div class="shortcut-keys"><kbd class="kbd">⇧</kbd><kbd class="kbd">Tab</kbd></div>
+      </div>
+      <div class="shortcut-item">
+        <span class="shortcut-label">Toggle Read-only</span>
+        <div class="shortcut-keys"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">⇧P</kbd></div>
+      </div>
+      <div class="shortcut-item">
+        <span class="shortcut-label">Clear Session</span>
+        <div class="shortcut-keys"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">⇧K</kbd></div>
+      </div>
+      <div class="shortcut-item">
+        <span class="shortcut-label">Close Modal</span>
+        <div class="shortcut-keys"><kbd class="kbd">Esc</kbd></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Image Preview Modal -->
+<div class="modal-overlay" id="modal-image">
+  <div class="modal-box" style="max-width: 680px;">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span>🖼️ Image Preview</span>
+      </div>
+      <button class="btn-icon" data-close-modal="modal-image">✕</button>
+    </div>
+    <div style="text-align:center; padding:16px 0; background: var(--bg-dark); border-radius: var(--radius-md); overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height: 200px;">
+      <img id="image-preview-img" src="" alt="Shared Image" style="max-width:100%; max-height:420px; border-radius: 8px; object-fit:contain; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+      <div id="image-meta-info" style="margin-top:12px; font-size:12px; color: var(--text-muted); font-family: var(--font-code);"></div>
+    </div>
+    <div class="modal-footer" style="justify-content: space-between;">
+      <button class="btn btn-ghost" id="btn-copy-image-url">📋 Copy Data URL</button>
+      <a id="btn-download-image" class="btn btn-primary" download="image.png" style="text-decoration:none;">⬇️ Download Image</a>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCRIPTS: CodeMirror
+══════════════════════════════════════════════════════════════ -->
+
+<!-- CodeMirror Core -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+
+<!-- Language Modes -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/php/php.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/ruby/ruby.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/go/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/rust/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/swift/swift.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/shell/shell.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/markdown/markdown.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/yaml/yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/lua/lua.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/r/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/haskell/haskell.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/dart/dart.min.js"></script>
+
+<!-- Addons -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/brace-fold.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/indent-fold.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/search.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/searchcursor.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/dialog/dialog.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/selection/active-line.min.js"></script>
+
+<!-- Our Editor Logic -->
+<script src="editor.js"></script>
+
+</body>
+</html>

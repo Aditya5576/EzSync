@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: ezsync
+    env: python
+    buildCommand: ""
+    startCommand: python server.py
