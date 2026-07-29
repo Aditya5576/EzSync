@@ -620,46 +620,183 @@
 }
 .footer a:hover { color: var(--accent-blue); }
 
-/* ── Responsive Landing ──────────────────────── */
-@media (max-width: 768px) {
-  .nav { padding: 0 16px; height: 56px; }
-  .nav-logo-tagline { display: none; }
-  .nav-logo-img { height: 30px; }
-  .section { padding: 50px 16px; }
-  .stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px 12px; }
-  .stat-number { font-size: 24px; }
-  .features-grid { grid-template-columns: 1fr; gap: 16px; }
-  .recent-sessions-section { padding: 40px 16px; }
-  .hero-orb-1, .hero-orb-2, .hero-orb-3 { display: none; }
-}
+/* ── Responsive Landing & Mobile Fixes ──────────────── */
+@media (max-width: 640px) {
+  .nav {
+    padding: 0 12px !important;
+    height: 54px !important;
+    background: rgba(7, 9, 14, 0.95) !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
 
-@media (max-width: 520px) {
-  .hero { padding: 70px 14px 40px; min-height: auto; }
-  .hero-brand-logo { max-width: 190px; margin-bottom: 14px; }
-  .hero-badge { font-size: 11px; padding: 4px 10px; margin-bottom: 14px; }
-  .hero-title { font-size: 26px; line-height: 1.22; margin-bottom: 12px; }
-  .hero-subtitle { font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
-  .room-input-wrap { width: 100%; max-width: 100%; }
+  .nav-logo-tagline {
+    display: none !important;
+  }
+
+  .nav-logo-img {
+    height: 26px !important;
+  }
+
+  .nav-logo-text {
+    font-size: 16px !important;
+  }
+
+  .nav-new-btn {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+  }
+
+  .hero {
+    padding: 96px 16px 40px !important; /* Generous top padding so fixed header never overlaps logo! */
+    min-height: auto !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .hero-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 0 4px !important;
+  }
+
+  .hero-brand-logo {
+    max-width: 170px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .hero-badge {
+    font-size: 10px !important;
+    padding: 4px 10px !important;
+    margin-bottom: 14px !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    text-align: center !important;
+    word-break: break-word !important;
+  }
+
+  .hero-title {
+    font-size: 26px !important;
+    line-height: 1.25 !important;
+    margin-bottom: 14px !important;
+    word-break: break-word !important;
+  }
+
+  .hero-subtitle {
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+    margin-bottom: 24px !important;
+    padding: 0 4px !important;
+    word-break: break-word !important;
+  }
+
+  .room-input-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
   .room-input-bar {
-    flex-direction: column;
-    align-items: stretch;
-    background: rgba(13, 17, 26, 0.85);
-    border-radius: var(--radius-lg);
-    padding: 8px;
-    gap: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    background: rgba(13, 17, 26, 0.95) !important;
+    border: 1px solid var(--border-glass) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: 10px !important;
+    gap: 10px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+    box-sizing: border-box !important;
   }
+
   .room-input-prefix {
-    padding: 6px 10px;
-    font-size: 12px;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 4px 6px !important;
+    font-size: 12px !important;
+    text-align: center !important;
+    color: var(--accent-blue) !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
-  .room-name-input { padding: 10px 12px; font-size: 15px; text-align: center; width: 100%; }
-  .btn-go { width: 100%; justify-content: center; margin: 0; padding: 12px; font-size: 15px; border-radius: var(--radius-md); }
-  .room-input-hint { font-size: 12px; word-break: break-word; }
-  .session-card { padding: 12px 14px; gap: 10px; }
+
+  .room-name-input {
+    padding: 12px !important;
+    font-size: 16px !important;
+    text-align: center !important;
+    width: 100% !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-md) !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    box-sizing: border-box !important;
+  }
+
+  .btn-go {
+    width: 100% !important;
+    height: 46px !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 16px !important;
+    font-size: 15px !important;
+    border-radius: var(--radius-md) !important;
+    box-sizing: border-box !important;
+  }
+
+  .room-input-hint {
+    font-size: 11px !important;
+    word-break: break-word !important;
+    padding: 0 6px !important;
+  }
+
+  .stats-row {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 14px 8px !important;
+    margin-top: 24px !important;
+    box-sizing: border-box !important;
+  }
+
+  .stat-item {
+    padding: 12px 6px !important;
+    text-align: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .stat-number {
+    font-size: 20px !important;
+  }
+
+  .stat-label {
+    font-size: 10px !important;
+  }
+
+  .section {
+    padding: 40px 16px !important;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .recent-sessions-section {
+    padding: 30px 14px !important;
+  }
+
+  .session-card {
+    padding: 12px !important;
+    gap: 8px !important;
+  }
+
+  .hero-orb-1, .hero-orb-2, .hero-orb-3 {
+    display: none !important;
+  }
 }
