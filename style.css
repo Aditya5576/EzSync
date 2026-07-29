@@ -95,6 +95,16 @@ body, button, input, select, textarea {
 }
 
 body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+img, svg, video, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+body {
   background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
