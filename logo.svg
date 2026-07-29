@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="100%" height="100%">
+  <defs>
+    <!-- Top Banner Gradient (Rich Royal Purple) -->
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="50%" stop-color="#6d28d9"/>
+      <stop offset="100%" stop-color="#5b21b6"/>
+    </linearGradient>
+
+    <!-- Purple Banner Fold Shadow -->
+    <linearGradient id="purpleFold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b0764"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+
+    <!-- Bottom Banner Gradient (Electric Vibrant Lime Green) -->
+    <linearGradient id="limeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d9f99d"/>
+      <stop offset="40%" stop-color="#bef264"/>
+      <stop offset="100%" stop-color="#84cc16"/>
+    </linearGradient>
+
+    <!-- Lime Banner Fold Shadow -->
+    <linearGradient id="limeFold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4d7c0f"/>
+      <stop offset="100%" stop-color="#1a2e05"/>
+    </linearGradient>
+
+    <!-- Soft Glow Drop Shadow -->
+    <filter id="hdDropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#5b21b6" flood-opacity="0.35"/>
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#84cc16" flood-opacity="0.30"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#hdDropShadow)">
+    <!-- Decorative Accent Triangles - Right Side -->
+    <polygon points="465,95 530,135 480,165" fill="#3b0764"/>
+    <polygon points="485,175 550,150 515,205" fill="#7c3aed"/>
+    <polygon points="480,210 535,225 500,250" fill="#a3e635"/>
+
+    <!-- Decorative Accent Triangles - Left Side -->
+    <polygon points="95,295 55,360 125,325" fill="#a3e635"/>
+    <polygon points="110,335 70,390 140,365" fill="#7c3aed"/>
+    <polygon points="145,325 115,380 165,355" fill="#1e1b4b"/>
+
+    <!-- TOP PURPLE BANNER FOLD (Top right back flap) -->
+    <polygon points="265,65 320,72 275,120" fill="url(#purpleFold)"/>
+
+    <!-- TOP PURPLE BANNER MAIN RIBBON -->
+    <polygon points="105,115 450,70 430,235 90,280" fill="url(#purpleGrad)"/>
+
+    <!-- Text "Ez" (Bold Brush Styling) -->
+    <g transform="rotate(-6, 260, 175)">
+      <!-- Text Drop Shadow for Depth -->
+      <text x="260" y="198" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="105" fill="rgba(0,0,0,0.25)" letter-spacing="2">Ez</text>
+      <text x="257" y="194" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="105" fill="#ffffff" letter-spacing="2">Ez</text>
+    </g>
+
+    <!-- BOTTOM LIME GREEN BANNER FOLD (Bottom left back flap) -->
+    <polygon points="205,355 315,405 270,330" fill="url(#limeFold)"/>
+
+    <!-- BOTTOM LIME GREEN BANNER MAIN RIBBON -->
+    <polygon points="205,255 520,200 470,385 155,440" fill="url(#limeGrad)"/>
+
+    <!-- Text "Sync" (Bold Obsidian Styling) -->
+    <g transform="rotate(-6, 335, 325)">
+      <!-- Subtle highlight shadow -->
+      <text x="337" y="348" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="95" fill="rgba(255,255,255,0.4)" letter-spacing="1">Sync</text>
+      <text x="335" y="345" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="95" fill="#0b0f19" letter-spacing="1">Sync</text>
+    </g>
+  </g>
+</svg>
