@@ -53,6 +53,14 @@ label.toolbar-btn {
 
 
 /* ── Layout ──────────────────────────────────── */
+.editor-page,
+.editor-page button,
+.editor-page select,
+.editor-page input,
+.editor-page textarea {
+  font-family: var(--font-code);
+}
+
 .editor-page {
   display: flex;
   flex-direction: column;
