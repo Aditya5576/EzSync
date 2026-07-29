@@ -41,23 +41,39 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_cors()
         self.end_headers()
 
-    # Known static file extensions — serve normally
-    STATIC_EXTS = {'.css', '.js', '.html', '.ico', '.png', '.jpg', '.svg', '.woff', '.woff2', '.ttf'}
+    # Custom mime map for Linux/Render compatibility
+    extensions_map = {
+        '':        'application/octet-stream',
+        '.html':   'text/html; charset=utf-8',
+        '.css':    'text/css; charset=utf-8',
+        '.js':     'application/javascript; charset=utf-8',
+        '.png':    'image/png',
+        '.jpg':    'image/jpeg',
+        '.jpeg':   'image/jpeg',
+        '.gif':    'image/gif',
+        '.svg':    'image/svg+xml',
+        '.ico':    'image/x-icon',
+        '.woff':   'font/woff',
+        '.woff2':  'font/woff2',
+        '.ttf':    'font/ttf',
+    }
+
+    STATIC_EXTS = {'.css', '.js', '.html', '.ico', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.woff', '.woff2', '.ttf'}
 
     def do_GET(self):
         parsed = urlparse(self.path)
-        path = parsed.path.rstrip('/')  # normalise trailing slash
+        raw_path = parsed.path.rstrip('/')
 
         # ── Health check ────────────────────────────────────────────
-        if path == '/ping':
+        if raw_path == '/ping':
             with rooms_lock:
                 room_count = len(rooms)
             self._json(200, {'status': 'ok', 'rooms': room_count})
             return
 
         # ── Poll for updates: GET /poll/<roomId> ────────────────────
-        if path.startswith('/poll/'):
-            room_id = path[len('/poll/'):].strip('/')
+        if raw_path.startswith('/poll/'):
+            room_id = raw_path[len('/poll/'):].strip('/')
             with rooms_lock:
                 room = dict(rooms.get(room_id, {}))
             if not room:
@@ -67,18 +83,25 @@ class Handler(SimpleHTTPRequestHandler):
             return
 
         # ── Root → landing page ─────────────────────────────────────
-        if path == '' or path == '/':
+        if raw_path == '' or raw_path == '/':
             self.path = '/index.html'
             super().do_GET()
             return
 
-        # ── Static files (have a known extension) ───────────────────
-        ext = os.path.splitext(path)[1].lower()
+        # ── Existing Static File (e.g. /logo.png, /style.css, /app.js) ──
+        rel_file = raw_path.lstrip('/')
+        if rel_file and os.path.isfile(rel_file):
+            self.path = '/' + rel_file
+            super().do_GET()
+            return
+
+        # ── Extension-based static file fallback ────────────────────
+        ext = os.path.splitext(raw_path)[1].lower()
         if ext in self.STATIC_EXTS:
             super().do_GET()
             return
 
-        # ── Everything else → room ID → serve editor.html ───────────
+        # ── Everything else → Room ID → serve editor.html ───────────
         # e.g. /aditya  /team-alpha  /abc12
         self.path = '/editor.html'
         super().do_GET()
