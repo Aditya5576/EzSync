@@ -293,6 +293,34 @@
   transform-style: preserve-3d;
 }
 
+/* ── Prominent Hero Brand Logo ───────────────────────────────── */
+.hero-logo-wrap {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-brand-logo {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 32px rgba(56, 189, 248, 0.35)) drop-shadow(0 0 24px rgba(192, 132, 252, 0.25));
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.4s ease;
+  animation: hero-logo-float 4s ease-in-out infinite;
+}
+
+.hero-brand-logo:hover {
+  transform: scale(1.06) translateY(-4px);
+  filter: drop-shadow(0 16px 40px rgba(56, 189, 248, 0.5)) drop-shadow(0 0 32px rgba(192, 132, 252, 0.4));
+}
+
+@keyframes hero-logo-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
 .hero-badge {
   display: inline-flex;
   align-items: center;
