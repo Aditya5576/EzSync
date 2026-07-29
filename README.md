@@ -1,17 +1,25 @@
 # ⚡ EzSync — Real-Time Collaborative Code & Image Editor
 
 <p align="center">
-  <img src="logo.png" alt="EzSync Logo" width="240">
+  <a href="https://ezsync-editor.onrender.com">
+    <img src="logo.svg" alt="EzSync Logo" width="280">
+  </a>
 </p>
 
 <p align="center">
+  <a href="https://ezsync-editor.onrender.com">
+    <img src="https://img.shields.io/badge/🌐%20Live%20Application-ezsync--editor.onrender.com-4f8ef7?style=for-the-badge&logo=render&logoColor=white" alt="Live Demo">
+  </a>
   <img src="https://img.shields.io/badge/Status-Active%20%26%20Live-brightgreen?style=for-the-badge&logo=render" alt="Status">
   <img src="https://img.shields.io/badge/Python-3.x%20Stdlib-blue?style=for-the-badge&logo=python" alt="Python">
   <img src="https://img.shields.io/badge/JavaScript-ES6%2B-yellow?style=for-the-badge&logo=javascript" alt="JavaScript">
   <img src="https://img.shields.io/badge/Dependencies-ZERO-orange?style=for-the-badge" alt="Zero Dependencies">
   <img src="https://img.shields.io/badge/Sync%20Latency-~300ms-purple?style=for-the-badge" alt="Sync Latency">
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
 </p>
+
+> [!IMPORTANT]
+> 🚀 **Live Production App**: **[https://ezsync-editor.onrender.com](https://ezsync-editor.onrender.com)**  
+> 🔗 **Try Room "aditya"**: **[https://ezsync-editor.onrender.com/aditya](https://ezsync-editor.onrender.com/aditya)**
 
 ---
 
