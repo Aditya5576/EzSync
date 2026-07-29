@@ -137,10 +137,58 @@ function clearSessions() {
 }
 
 // ── Scroll nav ───────────────────────────────────────────────────────────
-function setupScroll() {
-  const nav = document.querySelector('.nav');
-  if (!nav) return;
-  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20), { passive: true });
+// ── Smooth Scroll & Interactive Mouse Parallax ──────────────────────────────
+function setupScrollAndParallax() {
+  const nav         = document.querySelector('.nav');
+  const heroContent = document.querySelector('.hero-content');
+  const heroBg      = document.querySelector('.hero-bg');
+  const orb1        = document.querySelector('.hero-orb-1');
+  const orb2        = document.querySelector('.hero-orb-2');
+  const orb3        = document.querySelector('.hero-orb-3');
+
+  // Mouse Parallax State
+  let targetX = 0, targetY = 0;
+  let currentX = 0, currentY = 0;
+  const lerpFactor = 0.08;
+
+  // Track cursor position relative to screen center (-1 to 1)
+  window.addEventListener('mousemove', e => {
+    targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+    targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+
+  // RAF loop for silky smooth lerp physics
+  function renderParallax() {
+    currentX += (targetX - currentX) * lerpFactor;
+    currentY += (targetY - currentY) * lerpFactor;
+
+    const scrollY = window.scrollY;
+
+    // Shift Glowing Orbs with depth
+    if (orb1) orb1.style.transform = `translate3d(${currentX * -55}px, ${currentY * -40 + scrollY * 0.15}px, 0)`;
+    if (orb2) orb2.style.transform = `translate3d(${currentX * 65}px, ${currentY * 45 + scrollY * 0.1}px, 0)`;
+    if (orb3) orb3.style.transform = `translate3d(${currentX * -40}px, ${currentY * 60 + scrollY * 0.2}px, 0)`;
+
+    // Shift Grid pattern
+    if (heroBg) heroBg.style.transform = `translate3d(${currentX * 18}px, ${currentY * 18 - (scrollY % 40)}px, 0)`;
+
+    // 3D tilt & fade on hero content as user scrolls down
+    if (heroContent) {
+      if (scrollY < window.innerHeight * 1.2) {
+        heroContent.style.transform = `translate3d(0, ${scrollY * 0.3}px, 0) rotateY(${currentX * 3.5}deg) rotateX(${-currentY * 3.5}deg)`;
+        heroContent.style.opacity = Math.max(0, 1 - scrollY / (window.innerHeight * 0.75));
+      }
+    }
+
+    requestAnimationFrame(renderParallax);
+  }
+
+  requestAnimationFrame(renderParallax);
+
+  // Scrolled navbar blur state
+  window.addEventListener('scroll', () => {
+    if (nav) nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
 }
 
 // ── Counter animation ─────────────────────────────────────────────────────
@@ -159,7 +207,7 @@ function animateCounters() {
   });
 }
 
-// ── Intersection observer ────────────────────────────────────────────────
+// ── Intersection observer + 3D Tilt ───────────────────────────────────────
 function setupAnimations() {
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
@@ -178,11 +226,24 @@ function setupAnimations() {
     el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
     obs.observe(el);
   });
+
+  // Interactive 3D Card Tilt on Hover
+  document.querySelectorAll('.feature-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = `translateY(-6px) perspective(600px) rotateY(${x * 12}deg) rotateX(${-y * 12}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'translateY(0) perspective(600px) rotateY(0deg) rotateX(0deg)';
+    });
+  });
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  setupScroll();
+  setupScrollAndParallax();
   renderSessions();
   setupAnimations();
 

@@ -219,6 +219,7 @@
   text-align: center;
   padding: 80px 20px 60px;
   overflow: hidden;
+  perspective: 1000px;
 }
 
 /* Animated grid background */
@@ -231,6 +232,7 @@
   background-size: 40px 40px;
   animation: grid-drift 20s linear infinite;
   mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  will-change: transform;
 }
 @keyframes grid-drift {
   from { transform: translateY(0); }
@@ -244,6 +246,7 @@
   filter: blur(60px);
   pointer-events: none;
   animation: float 8s ease-in-out infinite;
+  will-change: transform;
 }
 .hero-orb-1 {
   width: 400px; height: 400px;
@@ -268,6 +271,8 @@
   position: relative;
   z-index: 2;
   max-width: 820px;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
 }
 
 .hero-badge {
