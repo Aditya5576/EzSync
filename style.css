@@ -204,6 +204,29 @@ code, kbd, pre {
   -webkit-backdrop-filter: blur(16px);
 }
 
+/* ── Logo Image ──────────────────────────────── */
+.nav-logo-img {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+  transition: transform var(--transition-fast);
+}
+.nav-logo:hover .nav-logo-img {
+  transform: scale(1.04);
+}
+
+.toolbar-logo-img {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+  transition: transform var(--transition-fast);
+}
+.toolbar-logo:hover .toolbar-logo-img {
+  transform: scale(1.04);
+}
+
 /* ── Badge ───────────────────────────────────── */
 .badge {
   display: inline-flex;

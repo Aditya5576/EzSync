@@ -1,6 +1,10 @@
 # ⚡ EzSync — Real-Time Collaborative Code & Image Editor
 
 <p align="center">
+  <img src="logo.png" alt="EzSync Logo" width="240">
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/Status-Active%20%26%20Live-brightgreen?style=for-the-badge&logo=render" alt="Status">
   <img src="https://img.shields.io/badge/Python-3.x%20Stdlib-blue?style=for-the-badge&logo=python" alt="Python">
   <img src="https://img.shields.io/badge/JavaScript-ES6%2B-yellow?style=for-the-badge&logo=javascript" alt="JavaScript">
