@@ -309,15 +309,19 @@ label.toolbar-btn {
 .sync-bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  padding: 4px 16px;
+  padding: 4px 12px;
   background: rgba(16,185,129,0.06);
   border-bottom: 1px solid rgba(16,185,129,0.15);
-  font-size: 12px;
+  font-size: 11px;
   color: var(--accent-green);
   font-weight: 500;
-  height: 28px;
+  min-height: 28px;
+  height: auto;
   flex-shrink: 0;
+  overflow: hidden;
+  box-sizing: border-box;
   transition: all var(--transition-base);
 }
 .sync-bar.syncing {
@@ -330,9 +334,19 @@ label.toolbar-btn {
   border-bottom-color: rgba(239,68,68,0.15);
   color: #ef4444;
 }
+
+.sync-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
 .sync-icon {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: currentColor;
   flex-shrink: 0;
@@ -340,11 +354,35 @@ label.toolbar-btn {
 .sync-bar.live .sync-icon { animation: pulse-dot 2s infinite; }
 .sync-bar.syncing .sync-icon { animation: spin 1s linear infinite; border-radius: 0; background: transparent; border: 2px solid currentColor; border-top-color: transparent; }
 
+#sync-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  font-family: var(--font-code);
+}
+
+.sync-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-family: var(--font-code);
+  font-size: 11px;
+}
+
+.sync-user-count {
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
 #sync-timestamp {
-  margin-left: auto;
   color: var(--text-muted);
   font-family: var(--font-code);
   font-size: 11px;
+  white-space: nowrap;
 }
 
 /* ── Editor Wrapper ──────────────────────────── */
@@ -585,24 +623,25 @@ label.toolbar-btn {
   40% { transform: translateY(-5px); }
 }
 
-/* ── Mobile Responsive ───────────────────────── */
-@media (max-width: 768px) {
-  .toolbar { height: auto; min-height: 52px; flex-wrap: wrap; padding: 6px 10px; gap: 6px; }
-  .toolbar-spacer { display: none; }
-  .session-info { max-width: 140px; padding: 4px 8px; }
-  .session-id { font-size: 11px; max-width: 80px; overflow: hidden; text-overflow: ellipsis; }
-  .lang-select { min-width: 85px; font-size: 11px; padding: 4px 8px; }
-  .theme-select { display: none; }
-  .toolbar-btn span { display: none; }
-  .toolbar-btn { padding: 6px 8px; }
-  .shortcuts-grid { grid-template-columns: 1fr; }
-  .status-bar { padding: 4px 10px; font-size: 11px; gap: 6px; flex-wrap: wrap; }
-  .status-left, .status-right { gap: 8px; }
-  .modal { padding: 14px; width: 94vw !important; max-width: 94vw !important; }
+/* ── Mobile Responsive Editor ───────────────────────── */
+@media (max-width: 640px) {
+  .toolbar { height: auto !important; min-height: 48px !important; flex-wrap: wrap !important; padding: 6px 8px !important; gap: 6px !important; }
+  .toolbar-spacer { display: none !important; }
+  .session-info { max-width: 115px !important; padding: 3px 6px !important; }
+  .session-id { font-size: 11px !important; max-width: 65px !important; }
+  .lang-select { min-width: 80px !important; font-size: 11px !important; padding: 4px 20px 4px 6px !important; }
+  .theme-select { display: none !important; }
+  .toolbar-btn span { display: none !important; }
+  .toolbar-btn { padding: 5px 6px !important; }
+  .shortcuts-grid { grid-template-columns: 1fr !important; }
+  .sync-bar { padding: 4px 8px !important; }
+  .sync-user-count { font-size: 10px !important; }
+  #sync-timestamp { display: none !important; } /* Prevents text collision/overlap on narrow screens! */
+  .modal { padding: 14px !important; width: 94vw !important; max-width: 94vw !important; }
 }
 
 @media (max-width: 480px) {
-  .toolbar-logo-img { height: 26px; }
-  .toolbar-logo-text { display: none; }
-  .session-info { max-width: 120px; }
+  .toolbar-logo-img { height: 24px !important; }
+  .toolbar-logo-text { display: none !important; }
+  .session-info { max-width: 105px !important; }
 }

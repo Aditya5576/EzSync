@@ -190,12 +190,14 @@
        SYNC STATUS BAR
   ══════════════════════════════════════════════════════════ -->
   <div class="sync-bar live" id="sync-bar">
-    <div class="sync-icon"></div>
-    <span id="sync-text">Connecting…</span>
-    <span style="margin-left:8px; color: var(--text-muted); font-size:11px;">
-      👥 <span id="user-count">1</span> active
-    </span>
-    <span id="sync-timestamp"></span>
+    <div class="sync-bar-left">
+      <div class="sync-icon"></div>
+      <span id="sync-text">Connecting…</span>
+    </div>
+    <div class="sync-bar-right">
+      <span class="sync-user-count">👥 <span id="user-count">1</span> active</span>
+      <span id="sync-timestamp"></span>
+    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
