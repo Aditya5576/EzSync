@@ -239,6 +239,24 @@
   to   { transform: translateY(-40px); }
 }
 
+/* Dynamic Interactive Mouse Spotlight Glow */
+.mouse-spotlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 650px;
+  height: 650px;
+  margin-top: -325px;
+  margin-left: -325px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.22) 0%, rgba(192, 132, 252, 0.14) 40%, rgba(34, 211, 238, 0.05) 65%, transparent 80%);
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform;
+  opacity: 0.95;
+}
+
 /* Glowing orbs */
 .hero-orb {
   position: absolute;

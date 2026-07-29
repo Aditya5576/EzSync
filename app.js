@@ -137,45 +137,60 @@ function clearSessions() {
 }
 
 // ── Scroll nav ───────────────────────────────────────────────────────────
-// ── Smooth Scroll & Interactive Mouse Parallax ──────────────────────────────
+// ── Smooth Scroll & Interactive Mouse Spotlight Parallax ────────────────────
 function setupScrollAndParallax() {
   const nav         = document.querySelector('.nav');
   const heroContent = document.querySelector('.hero-content');
   const heroBg      = document.querySelector('.hero-bg');
+  const spotlight   = document.getElementById('mouse-spotlight');
   const orb1        = document.querySelector('.hero-orb-1');
   const orb2        = document.querySelector('.hero-orb-2');
   const orb3        = document.querySelector('.hero-orb-3');
 
-  // Mouse Parallax State
+  // Mouse Parallax & Spotlight State
+  let rawMouseX = window.innerWidth / 2;
+  let rawMouseY = window.innerHeight / 3;
+  let currentSpotlightX = rawMouseX;
+  let currentSpotlightY = rawMouseY;
+
   let targetX = 0, targetY = 0;
   let currentX = 0, currentY = 0;
-  const lerpFactor = 0.08;
+  const lerpFactor = 0.1;
 
-  // Track cursor position relative to screen center (-1 to 1)
+  // Track cursor position on window
   window.addEventListener('mousemove', e => {
+    rawMouseX = e.clientX;
+    rawMouseY = e.clientY + window.scrollY;
     targetX = (e.clientX / window.innerWidth - 0.5) * 2;
     targetY = (e.clientY / window.innerHeight - 0.5) * 2;
   }, { passive: true });
 
-  // RAF loop for silky smooth lerp physics
+  // RAF loop for silky smooth cursor spotlight + orb physics
   function renderParallax() {
     currentX += (targetX - currentX) * lerpFactor;
     currentY += (targetY - currentY) * lerpFactor;
+    currentSpotlightX += (rawMouseX - currentSpotlightX) * lerpFactor;
+    currentSpotlightY += (rawMouseY - currentSpotlightY) * lerpFactor;
 
     const scrollY = window.scrollY;
 
-    // Shift Glowing Orbs with depth
-    if (orb1) orb1.style.transform = `translate3d(${currentX * -55}px, ${currentY * -40 + scrollY * 0.15}px, 0)`;
-    if (orb2) orb2.style.transform = `translate3d(${currentX * 65}px, ${currentY * 45 + scrollY * 0.1}px, 0)`;
-    if (orb3) orb3.style.transform = `translate3d(${currentX * -40}px, ${currentY * 60 + scrollY * 0.2}px, 0)`;
+    // Follow cursor directly with dynamic spotlight glow
+    if (spotlight) {
+      spotlight.style.transform = `translate3d(${currentSpotlightX}px, ${currentSpotlightY}px, 0)`;
+    }
+
+    // Shift Glowing Orbs towards & away from cursor
+    if (orb1) orb1.style.transform = `translate3d(${currentX * -70}px, ${currentY * -50 + scrollY * 0.15}px, 0)`;
+    if (orb2) orb2.style.transform = `translate3d(${currentX * 80}px, ${currentY * 60 + scrollY * 0.1}px, 0)`;
+    if (orb3) orb3.style.transform = `translate3d(${currentX * -50}px, ${currentY * 70 + scrollY * 0.2}px, 0)`;
 
     // Shift Grid pattern
-    if (heroBg) heroBg.style.transform = `translate3d(${currentX * 18}px, ${currentY * 18 - (scrollY % 40)}px, 0)`;
+    if (heroBg) heroBg.style.transform = `translate3d(${currentX * 22}px, ${currentY * 22 - (scrollY % 40)}px, 0)`;
 
     // 3D tilt & fade on hero content as user scrolls down
     if (heroContent) {
       if (scrollY < window.innerHeight * 1.2) {
-        heroContent.style.transform = `translate3d(0, ${scrollY * 0.3}px, 0) rotateY(${currentX * 3.5}deg) rotateX(${-currentY * 3.5}deg)`;
+        heroContent.style.transform = `translate3d(0, ${scrollY * 0.35}px, 0) rotateY(${currentX * 4}deg) rotateX(${-currentY * 4}deg)`;
         heroContent.style.opacity = Math.max(0, 1 - scrollY / (window.innerHeight * 0.75));
       }
     }
