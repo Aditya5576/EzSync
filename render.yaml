@@ -1,6 +1,7 @@
 services:
   - type: web
-    name: ezsync
+    name: ezsync-editor
     env: python
-    buildCommand: ""
+    buildCommand: echo "ready"
     startCommand: python server.py
+    autoDeploy: true
